@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import ltweb.entity.Category;
@@ -49,7 +50,8 @@ public class CategoryController {
 	
 	@PostMapping("saveOrUpdate")
 	public ModelAndView saveOrUpdate(ModelMap model, 
-			@Valid @ModelAttribute("category") CategoryModel cateModel, BindingResult result) {
+			@Valid @ModelAttribute("category") CategoryModel cateModel, 
+			BindingResult result, RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return new ModelAndView("admin/categories/addOrEdit");
 		}
@@ -70,10 +72,10 @@ public class CategoryController {
 			message = "Category is saved!!!!";
 		}
 		
-		model.addAttribute("message", message);
+		redirectAttributes.addFlashAttribute("message", message);
 		
 		// redirect ve url controller
-		return new ModelAndView("forward:/admin/categories", model);
+		return new ModelAndView("redirect:/admin/categories");
 	}
 	
 	@GetMapping("edit/{id}")
@@ -89,6 +91,7 @@ public class CategoryController {
 			BeanUtils.copyProperties(entity, cateModel);
 			
 			cateModel.setIsEdit(true);
+			model.addAttribute("category", cateModel);
 			
 			return new ModelAndView("admin/categories/addOrEdit", model);
 		}
@@ -99,14 +102,13 @@ public class CategoryController {
 	}
 
 	@GetMapping("delete/{id}")
-	public ModelAndView delete(ModelMap model, @PathVariable("id") int id) {
+	public ModelAndView delete(ModelMap model, @PathVariable("id") int id,
+			RedirectAttributes redirectAttributes) {
 
 		categoryService.deleteById(id);
 
-		model.addAttribute("message","Category is deleted!!!!");
+		redirectAttributes.addFlashAttribute("message", "Category is deleted!!!!");
 		return new ModelAndView("redirect:/admin/categories", model);
 	}
-	
-	
 
 }
