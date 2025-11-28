@@ -40,6 +40,10 @@ public class CategoryController {
 
 	@RequestMapping("")
 	public String list(ModelMap model) {
+		
+		System.out.println("--------------------------------------");
+	    System.out.println("TEST: ĐÃ CHẠY VÀO HÀM LIST CATEGORY"); 
+	    System.out.println("--------------------------------------");
 		//gọi hàm findAll() trong service
 		List<Category> list = categoryService.findAll();
 

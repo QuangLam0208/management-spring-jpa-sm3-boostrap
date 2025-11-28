@@ -18,6 +18,12 @@ public class CategoryModel {
  @NotEmpty
  @Length(min=5)
  private String name;
+ 
+ private String code;
+ 
+ private String images;
+ 
+ private boolean status;
 
  private Boolean isEdit=false;
 }
